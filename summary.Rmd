@@ -1,0 +1,120 @@
+---
+title: "BTC"
+author: "Simon Steyskal"
+date: "24 Juni 2016"
+output: html_document
+---
+
+<style>
+  .col2 {
+    columns: 2 200px;         /* number of columns and width in pixels*/
+    -webkit-columns: 2 200px; /* chrome, safari */
+    -moz-columns: 2 200px;    /* firefox */
+    min-height: 360px;
+  }
+  .col3 {
+    columns: 3 100px;
+    -webkit-columns: 3 100px;
+    -moz-columns: 3 100px;
+  	min-height: 200px;
+  }
+.main-container {
+  max-width: 2048px;
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_packages, include=FALSE}
+library(plotly)
+```
+
+## Calculating Number of BTC Transaction Inputs/outputs
+
+```{r, eval=F}
+Bash: awk -F, '{a[$1]++;}END{for (i in a)print i, a[i];}' tx_input_address.csv > nrInputsPerTX.csv
+Bash: awk -F, '{a[$1]++;}END{for (i in a)print i, a[i];}' tx_output_address.csv > nrOutputsPerTX.csv
+```
+
+### Loading both csv in R
+
+```{r, eval=FALSE}
+nrInputsPerTX <- read.csv("nrInputsPerTX.csv", stringsAsFactors=FALSE)
+nrOutputsPerTX <- read.csv("nrOutputsPerTX.csv", stringsAsFactors=FALSE)
+```
+*** 
+```{r, echo=FALSE}
+nrInputsPerTX <- read.csv("C:/Users/ssteyska/Desktop/sorted_nrInputsPerTX.csv", stringsAsFactors=FALSE)
+nrOutputsPerTX <- read.csv("C:/Users/ssteyska/Desktop/sorted_nrOutputsPerTX.csv", stringsAsFactors=FALSE)
+```
+
+### Characteristics
+
+#### Distinct Input Addresses per Transaction
+<div class="col3">
+```{r}
+head(nrInputsPerTX)
+tail(nrInputsPerTX)
+summary(nrInputsPerTX$amount)
+```
+</div>
+*** 
+#### Distinct Output Addresses per Transaction
+<div class="col3">
+```{r}
+head(nrOutputsPerTX)
+tail(nrOutputsPerTX)
+summary(nrOutputsPerTX$amount)
+```
+</div>
+*** 
+### Calculating Percentage of Transactions having 1..100 Inputs/Outputs
+```{r}
+inputsPerTx = NULL
+amount <- nrInputsPerTX$amount
+for(i in 1:100) {
+ inputsPerTx = rbind(inputsPerTx, data.frame(nrIn=i,am=100 * length(which(amount == i)) / length(amount)))
+}
+```
+
+```{r}
+outputsPerTx = NULL
+amount2 <- nrOutputsPerTX$amount
+for(i in 1:100) {
+ outputsPerTx = rbind(outputsPerTx, data.frame(nrIn=i,am=100 * length(which(amount2 == i)) / length(amount2)))
+}
+```
+
+### Results
+#### Inputs
+<div class="col2">
+* Out of 2923321 transactions [^1]:
+    + 79% have only one input
+    + 10% have 2 inputs
+    + 99.55% have <= 10 inputs
+```{r}
+head(inputsPerTx)
+plot_ly(inputsPerTx,labels=nrIn,values=am, type="pie",showlegend = F)%>%
+  layout(width = 300, height = 300)
+```
+</div>
+*** 
+#### Outputs
+<div class="col2">
+* Out of 3103109 transactions:
+    + 25.57% have only one output
+    + 73% have 2 outputs
+    + 99.1% have <= 5 outputs
+```{r}
+head(outputsPerTx)
+plot_ly(outputsPerTx,labels=nrIn,values=am, type="pie",showlegend = F)%>%
+  layout(width = 300, height = 300)
+```
+</div>
+
+
+[^1]: 179788 transactions had no input

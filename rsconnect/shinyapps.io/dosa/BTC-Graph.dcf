@@ -1,0 +1,10 @@
+name: BTC-Graph
+account: dosa
+server: shinyapps.io
+appId: 108892
+bundleId: 486206
+url: https://dosa.shinyapps.io/BTC-Graph/
+when: 1466589240.68497
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: www/jquery-ui.css|www/jquery-ui.min.js
