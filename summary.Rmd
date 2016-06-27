@@ -48,8 +48,10 @@ nrOutputsPerTX <- read.csv("nrOutputsPerTX.csv", stringsAsFactors=FALSE)
 ```
 *** 
 ```{r, echo=FALSE}
-nrInputsPerTX <- read.csv("C:/Users/ssteyska/Desktop/sorted_nrInputsPerTX.csv", stringsAsFactors=FALSE)
-nrOutputsPerTX <- read.csv("C:/Users/ssteyska/Desktop/sorted_nrOutputsPerTX.csv", stringsAsFactors=FALSE)
+#C:/Users/ssteyska/Desktop
+#C:/Projects/R/data
+nrInputsPerTX <- read.csv("C:/Projects/R/data/sorted_nrInputsPerTX.csv", stringsAsFactors=FALSE)
+nrOutputsPerTX <- read.csv("C:/Projects/R/data/sorted_nrOutputsPerTX.csv", stringsAsFactors=FALSE)
 ```
 
 ### Characteristics
